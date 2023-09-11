@@ -5,10 +5,14 @@ const BarMobile = document.querySelector(".menu");
 const ListMobile = document.querySelector(".mobile-menu");
 const shoppingCartContainer = document.querySelector("#shoppingCartContainer");
 const cardsContainer = document.querySelector(".cards-container")
+const productDetailContainer = document.querySelector("#productDetail")
+const productDetailContianerClose = document.querySelector(".product-detail-close")
+
 
 menuEmail.addEventListener("click", toggleDesktopMenu);
 BarMobile.addEventListener("click", toggleListMenu);
 menuCarritoIcon.addEventListener("click", toggleCarritoAside);
+productDetailContianerClose.addEventListener("click", closeproductDetailAside)
 
 
 
@@ -35,6 +39,8 @@ function toggleListMenu(){
     }
 
     ListMobile.classList.toggle("inactive");
+
+    closeproductDetailAside()
 }
 
 
@@ -54,9 +60,27 @@ function toggleCarritoAside(){
         
     }
 
+    const isProductDetailClose = productDetailContainer.classList.contains("inactive");
+
+    if(!isProductDetailClose){
+        productDetailContainer.classList.add("inactive")
+    }
+
     shoppingCartContainer.classList.toggle("inactive");
 
 
+}
+
+
+function openproductDetailAside(){
+    shoppingCartContainer.classList.add("inactive");
+
+
+    productDetailContainer.classList.remove("inactive")
+}
+
+function closeproductDetailAside(){
+    productDetailContainer.classList.add("inactive")
 }
 
 /*
@@ -102,42 +126,46 @@ productList.push({
 });
 
 
+function renderProducts(arr){
+    for (product of arr){
+        const productCard = document.createElement("div");
+        productCard.classList.add("product-card");
 
-for (product of productList){
-    const productCard = document.createElement("div");
-    productCard.classList.add("product-card");
+        const img = document.createElement("img");
+        img.setAttribute("src", product.image);
+        img.addEventListener("click", openproductDetailAside)
 
-    const img = document.createElement("img");
-    img.setAttribute("src", product.image);
-
-    const productInfo = document.createElement("div");
-    productInfo.classList.add("product-info");
-
-
-    const productInfoDiv = document.createElement("div");
+        const productInfo = document.createElement("div");
+        productInfo.classList.add("product-info");
 
 
-    const productPrice = document.createElement("p");
-    productPrice.innerText = "$" + product.price;
-    const productName = document.createElement("p");
-    productName.innerText = product.name;
-
-    productInfoDiv.appendChild(productPrice);
-    productInfoDiv.appendChild(productName);
-
-    const productInfoFigure = document.createElement("figure");
-    const productImgCard = document.createElement("img");
-    productImgCard.setAttribute("src", "./icons/bt_add_to_cart.svg" );
-
-    productInfoFigure.appendChild(productImgCard);
+        const productInfoDiv = document.createElement("div");
 
 
-    productInfo.appendChild(productInfoDiv);
-    productInfo.appendChild(productInfoFigure);
+        const productPrice = document.createElement("p");
+        productPrice.innerText = "$" + product.price;
+        const productName = document.createElement("p");
+        productName.innerText = product.name;
+
+        productInfoDiv.appendChild(productPrice);
+        productInfoDiv.appendChild(productName);
+
+        const productInfoFigure = document.createElement("figure");
+        const productImgCard = document.createElement("img");
+        productImgCard.setAttribute("src", "./icons/bt_add_to_cart.svg" );
+
+        productInfoFigure.appendChild(productImgCard);
 
 
-    productCard.appendChild(img);
-    productCard.appendChild(productInfo);
+        productInfo.appendChild(productInfoDiv);
+        productInfo.appendChild(productInfoFigure);
 
-    cardsContainer.appendChild(productCard);
+
+        productCard.appendChild(img);
+        productCard.appendChild(productInfo);
+
+        cardsContainer.appendChild(productCard);
+    }
 }
+
+renderProducts(productList);
